@@ -1,0 +1,24 @@
+# Logs
+app/logs
+app/*.log
+app/npm-debug.log*
+app/yarn-debug.log*
+app/yarn-error.log*
+app/pnpm-debug.log*
+app/lerna-debug.log*
+
+# Node Modules and Build Files
+app/node_modules
+app/dist
+app/dist-ssr
+app/*.local
+
+# Editor directories and files
+app/.vscode
+app/.idea
+app/.DS_Store
+app/*.suo
+app/*.ntvs*
+app/*.njsproj
+app/*.sln
+app/*.sw?
