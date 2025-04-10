@@ -4,7 +4,7 @@
     <div class="pages">
       <RouterLink to="/">Home</RouterLink>
       <RouterLink to="/about">About Us</RouterLink>
-      <RouterLink to="/post">Post</RouterLink>
+      <RouterLink to="/posts">Posts</RouterLink>
     </div>
   </header>
 </template>

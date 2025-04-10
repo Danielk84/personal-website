@@ -18,6 +18,9 @@ const app = createApp(App)
   .component("FooterLayer", defineAsyncComponent(() => 
     import("./components/FooterLayer.vue")
   ))
+  .component("PostOverview", defineAsyncComponent(() =>
+    import("./components/PostOverview.vue")
+  ))
   .use(router)
 
 app.mount('#app');
