@@ -9,6 +9,9 @@ const app = createApp(App)
   .component("HeaderLayer", defineAsyncComponent(() => 
     import("./components/HeaderLayer.vue")
   ))
+  .component("PostBox", defineAsyncComponent(() =>
+    import("./components/PostBox.vue")
+  ))
   .use(router)
 
 app.mount('#app');
