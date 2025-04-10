@@ -1,7 +1,7 @@
 <template>
-  <div class="flex flex-col">
+  <div class="flex flex-col bg-w-1 text-f-1">
     <HeaderLayer />
-    <div class="z-0 my-[60px] min-h-[80vh]">
+    <div class="z-0 my-[80px] min-h-[80vh]">
       <RouterView />
     </div>
     <div class="z-20">

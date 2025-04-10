@@ -1,5 +1,5 @@
 <template>
-  <div class="content-box">
+  <div class="content-box h-[50vh]">
     <h1>hello</h1>
   </div>
     <div class="ref-box overflow-auto">
@@ -9,7 +9,7 @@
       <PostBox />
       <PostBox />
     </div>
-  <div class="content-box">
+  <div class="content-box h-[600px]">
     <h2>this content box</h2>
   </div>
   <div class="ref-box">
@@ -21,10 +21,10 @@
   @reference "../assets/base.css";
 
   .content-box {
-    @apply flex justify-center items-center h-[600px];
+    @apply flex justify-center items-center;
   }
   .ref-box {
-    @apply h-[600px] bg-neutral-700 shadow-[0_0_15px_var(--c-d-4)]
+    @apply h-[600px] bg-b-2 drop-shadow-xl/25
       flex justify-evenly items-center;
   }
 </style>

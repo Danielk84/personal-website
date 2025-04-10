@@ -1,6 +1,6 @@
 <template>
-  <div class="m-4 min-w-[350px] h-[470px] rounded-2xl shadow-xl/20
-  shadow-amber-50 bg-amber-50">
+  <div class="bg-b-1 drop-shadow-xl/50 m-4
+    min-w-xs h-[470px] rounded-xl">
 
   </div>
 </template>

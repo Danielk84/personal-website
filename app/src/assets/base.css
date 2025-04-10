@@ -18,7 +18,11 @@
   --c-a-4: #A3BD8C;
   --c-a-5: #B38EAC;
 }
-body {
-  @apply bg-[var(--c-d-1)]
-    flex flex-col;
+@theme {
+  --color-w-1: #DAD6C8;
+  --color-w-2: #101010;
+  --color-b-1: #e8e8e7DD;
+  --color-b-2: #073630;
+  --color-f-1: #000;
+  --color-f-2: #fff;
 }

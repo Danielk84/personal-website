@@ -1,5 +1,6 @@
 <template>
-  <footer class="flex justify-center items-center bg-blue-100 h-[400px]">
+  <footer class="bg-w-2 h-[480px] m-4 p-4 rounded-4xl
+    flex justify-center items-center">
 
   </footer>
 </template>
