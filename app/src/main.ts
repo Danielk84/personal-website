@@ -1,5 +1,14 @@
-import { createApp } from 'vue'
-import './assets/style.css'
-import App from './App.vue'
+import './assets/base.css'
 
-createApp(App).mount('#app')
+import { createApp, defineAsyncComponent } from 'vue'
+
+import App from './App.vue'
+import router from "./router"
+
+const app = createApp(App)
+  .component("HeaderLayer", defineAsyncComponent(() => 
+    import("./components/HeaderLayer.vue")
+  ))
+  .use(router)
+
+app.mount('#app');
