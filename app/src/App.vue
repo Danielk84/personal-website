@@ -4,6 +4,7 @@
     <div class="view">
       <RouterView />
     </div>
+    <FooterLayer />
   </div>
 </template>
 
