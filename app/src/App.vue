@@ -1,15 +1,11 @@
 <template>
   <div class="flex flex-col">
     <HeaderLayer />
-    <div class="view">
+    <div class="z-0 my-[60px]">
       <RouterView />
     </div>
-    <FooterLayer />
+    <div class="z-20">
+      <FooterLayer />
+    </div>
   </div>
 </template>
-
-<style scoped>
-  .view {
-    @apply z-0 my-[60px]
-  }
-</style>
