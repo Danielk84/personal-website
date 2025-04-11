@@ -21,6 +21,9 @@ const app = createApp(App)
   .component("PostOverview", defineAsyncComponent(() =>
     import("./components/PostOverview.vue")
   ))
+  .component("FirstButtom", defineAsyncComponent(() =>
+    import("./components/FirstButtom.vue")
+  ))
   .use(router)
 
 app.mount('#app');
