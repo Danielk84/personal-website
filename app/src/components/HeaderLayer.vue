@@ -12,8 +12,9 @@
         <RouterLink to="/posts">Posts</RouterLink>
       </div>
 
-      <div>
-        <FirstButtom address="/post">Login</FirstButtom>
+      <div class="flex">
+        <FirstButton address="/post">Login</FirstButton>
+        <SecondButton address="/post">SginUp</SecondButton>
       </div>
     </div>
   </header>

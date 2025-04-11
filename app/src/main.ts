@@ -21,8 +21,11 @@ const app = createApp(App)
   .component("PostOverview", defineAsyncComponent(() =>
     import("./components/PostOverview.vue")
   ))
-  .component("FirstButtom", defineAsyncComponent(() =>
-    import("./components/FirstButtom.vue")
+  .component("FirstButton", defineAsyncComponent(() =>
+    import("./components/FirstButton.vue")
+  ))
+  .component("SecondButton", defineAsyncComponent(() => 
+    import("./components/SecondButton.vue")
   ))
   .use(router)
 
