@@ -24,7 +24,7 @@
     @apply flex justify-center items-center;
   }
   .ref-box {
-    @apply h-[600px] bg-b-2 drop-shadow-xl/25
-      flex justify-evenly items-center;
+    @apply bg-b-2 drop-shadow-xl/25 h-fit p-4
+      flex justify-evenly items-center flex-wrap;
   }
 </style>
