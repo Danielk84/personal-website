@@ -7,9 +7,9 @@
       <div class="icon"></div>
 
       <div class="flex gap-[2rem]">
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About Us</RouterLink>
-        <RouterLink to="/posts">Posts</RouterLink>
+        <RouterLink to="/" class="base-btn-transition router">Home</RouterLink>
+        <RouterLink to="/about" class="base-btn-transition router">About Us</RouterLink>
+        <RouterLink to="/posts" class="base-btn-transition router">Posts</RouterLink>
       </div>
 
       <div class="flex">

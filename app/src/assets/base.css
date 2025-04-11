@@ -9,3 +9,12 @@
   --color-f-2: #fff;
   --color-btn-1: #FB4D16;
 }
+
+.base-btn-transition {
+  @apply transition-all duration-200 ease-in
+    hover:scale-105 hover:m-2;
+}
+
+.router {
+  @apply hover:drop-shadow-xl/25;   
+}

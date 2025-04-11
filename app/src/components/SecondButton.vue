@@ -17,7 +17,9 @@ const {
         backgroundColor: `var(${color})`,
         borderColor: `var(${bColor})`,
       }"
-      class="m-4 py-2 px-4 h-fit w-fit rounded-3xl">
+      class="base-btn-transition
+        base_btn m-4 py-2 px-4 h-fit w-fit rounded-3xl
+        hover:border-2">
       <slot></slot>
     </div>
   </RouterLink>
