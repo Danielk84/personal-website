@@ -3,6 +3,7 @@ from django.template.defaultfilters import slugify
 
 from .models import Post
 
+
 class PostTestCase(TestCase):
     def setUp(self):
         for i in range(5):
