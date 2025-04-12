@@ -7,7 +7,23 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 
 from .models import Post
-from .serializers import PostOverviewSerializer
+from .serializers import (
+    PostSerializer,
+    PostOverviewSerializer,
+)
+
+
+class PostViewSet(
+    mixins.RetrieveModelMixin,
+    mixins.CreateModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.DestroyModelMixin,
+    viewsets.GenericViewSet,
+):
+    """ this section not complete, because there is not auth system. """
+    queryset = Post.objects.published()
+    serializer_class = PostSerializer
+    lookup_field = "slug"
 
 
 class PostListViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):

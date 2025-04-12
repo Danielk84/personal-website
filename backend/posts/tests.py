@@ -12,6 +12,7 @@ from .serializers import (
     PostOverviewSerializer,
 )
 
+
 class PostModelTestCase(TestCase):
     def setUp(self):
         for i in range(5):
