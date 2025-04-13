@@ -19,6 +19,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = get_random_secret_key()
 
+# for PyJWT Tokens
+TOKEN_EXPIRED_TIME = 60
+TOKEN_ALGORITHM = "HS256"
+
 DEBUG = True
 
 ALLOWED_HOSTS = []
@@ -71,7 +75,12 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": "redis://localhost:6379",
+    }
+}
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -96,7 +105,10 @@ REST_FRAMEWORK = {
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'Asia/Tehran'
+TIME_ZONE = CELERY_TIMEZONE = 'Asia/Tehran'
+
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
 
 USE_I18N = True
 
