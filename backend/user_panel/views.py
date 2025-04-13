@@ -18,7 +18,8 @@ def jwt_login(req: Request):
             return Response(data.errors, status=status.HTTP_400_BAD_REQUEST)
 
         assert (user := authenticate(
-            username=data.username, password=data.password,
+            username=data.validated_data["username"],
+            password=data.validated_data["password"],
         ))
         token = generate_token(user)
 

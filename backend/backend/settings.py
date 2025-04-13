@@ -17,10 +17,13 @@ from django.core.management.utils import get_random_secret_key
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = get_random_secret_key()
+# for test
+# SECRET_KEY = get_random_secret_key()
+SECRET_KEY = '0@#wgkd1eb(6i4k&f52&2c-cwf&o!aob2%*o8l4dq)o*2bej49'
 
-# for PyJWT Tokens
-TOKEN_EXPIRED_TIME = 60
+
+# for PyJWT Tokens and timeout of caches
+TOKEN_EXPIRED_TIME = 60 #minutes
 TOKEN_ALGORITHM = "HS256"
 
 DEBUG = True
@@ -36,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "rest_framework",
+    "user_panel",
     "posts",
 ]
 
@@ -78,7 +82,7 @@ DATABASES = {
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",
-        "LOCATION": "redis://localhost:6379",
+        "LOCATION": "redis://localhost:6379/0",
     }
 }
 AUTH_PASSWORD_VALIDATORS = [
@@ -109,6 +113,8 @@ TIME_ZONE = CELERY_TIMEZONE = 'Asia/Tehran'
 
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
+CELERY_BROKER_URL = "redis://127.0.0.1:6379/1"
+
 
 USE_I18N = True
 
