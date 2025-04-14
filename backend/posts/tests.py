@@ -1,7 +1,9 @@
 from datetime import timedelta
 
+import orjson
 from django.test import TestCase
 from django.utils import timezone
+from django.core.cache import cache
 from django.template.defaultfilters import slugify
 from rest_framework import status
 from rest_framework.test import APIClient
@@ -48,6 +50,31 @@ class PostModelTestCase(TestCase):
         last_modify = post.last_modify
         post.save()
         self.assertNotEqual(post.last_modify, last_modify)
+
+
+class PostViewTestCase(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.base_url = "/post/"
+        self.active_post =  Post.objects.create(
+                title="title: 1", is_active=True,
+                body="body 1", summary="summary 1",
+            )
+        self.inactive_post =  Post.objects.create(
+                title="title: 2", is_active=False,
+                body="body 2", summary="summary 2",
+            )
+
+    def test_get_post(self):
+        resp = self.client.get(self.base_url + self.active_post.slug + "/")
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        self.assertEqual(
+            resp.data,
+            orjson.loads(cache.get(f"post-{self.active_post.slug}"))
+        )
+
+        resp = self.client.get(self.base_url + self.inactive_post.slug + "/")
+        self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
 
 
 class PostListViewSetTestCase(TestCase):

@@ -6,7 +6,8 @@ from . import views
 router = DefaultRouter()
 
 router.register(r"posts", views.PostListViewSet, basename="posts")
-router.register(r"post", views.PostViewSet, basename="post")
 
 app_name = "posts"
-urlpatterns = router.urls
+urlpatterns = [
+    path("post/<slug:slug_value>/", views.get_post, name="post"),
+] + router.urls
