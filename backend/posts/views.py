@@ -49,3 +49,15 @@ class PostListViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
         return Response(
             self.serializer_class(self.queryset[:4], many=True).data
         )
+
+
+class PostManagerView(
+    mixins.RetrieveModelMixin,
+    mixins.CreateModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.DestroyModelMixin,
+    viewsets.GenericViewSet,
+):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    lookup_field = "slug"

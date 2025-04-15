@@ -15,5 +15,4 @@ app.autodiscover_tasks()
 
 @app.task
 def set_cache(key, value):
-    print(value)
     cache.set(key, value, timeout=settings.TOKEN_EXPIRED_TIME * 60)

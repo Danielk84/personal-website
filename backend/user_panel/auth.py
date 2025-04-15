@@ -4,13 +4,15 @@ from datetime import datetime, timezone, timedelta
 import jwt
 import orjson
 from django.conf import settings
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.core.cache import cache
+from rest_framework import exceptions
+from rest_framework.authentication import TokenAuthentication
 
 from backend.celery import set_cache
 
 
-def generate_token(user: User) -> str | None:
+def generate_token(user) -> str | None:
     """
     Generates a JSON Web Token (JWT) for a given user and stores it in the cache.
 
@@ -45,7 +47,7 @@ def generate_token(user: User) -> str | None:
         raise e
 
 
-def check_token(token: str) -> User | None:
+def check_token(token: str):
     """
     Validates a JWT token and retrieves the associated user if the token is valid.
 
@@ -61,7 +63,7 @@ def check_token(token: str) -> User | None:
             key=settings.SECRET_KEY,
             algorithms=[settings.TOKEN_ALGORITHM,]
         )
-        user = User.objects.get(
+        user = get_user_model().objects.get(
             pk=payload["user_id"],
             username=payload["username"],
         )
@@ -75,3 +77,30 @@ def check_token(token: str) -> User | None:
         return user
     except Exception as e:
         return None
+
+
+class JWTAuthentication(TokenAuthentication):
+    """
+    Custom authentication class for validating JSON Web Tokens (JWTs).
+
+    This class extends DRF's TokenAuthentication and overrides the 
+    `authenticate_credentials` method to validate and authenticate a user
+    based on the provided JWT.
+
+    Features:
+    1. Validates the given JWT using a custom `check_token` function.
+    2. Retrieves the authenticated user associated with the valid token.
+    3. Raises an exception if the token is invalid, expired, or fails validation.
+
+    """
+    def authenticate_credentials(self, key):
+        """
+        This method used by authentication method in TokenAuthentication,
+        so it not used directly.
+        """
+        try:
+            assert (user := check_token(key))
+
+            return (user, key)
+        except Exception:
+            raise exceptions.AuthenticationFailed("Invalid Token.")
