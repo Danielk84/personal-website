@@ -98,9 +98,7 @@ class JWTAuthentication(TokenAuthentication):
         This method used by authentication method in TokenAuthentication,
         so it not used directly.
         """
-        try:
-            assert (user := check_token(key))
+        if not (user := check_token(key)):
+            raise exceptions.NotAuthenticated("Invalid Token.")
 
-            return (user, key)
-        except Exception:
-            raise exceptions.AuthenticationFailed("Invalid Token.")
+        return (user, key)

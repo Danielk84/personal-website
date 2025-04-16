@@ -89,5 +89,5 @@ class AuthTestCase(TestCase):
             algorithm=settings.TOKEN_ALGORITHM,
         )
         req.META['HTTP_AUTHORIZATION'] = f'Token {token}'
-        with self.assertRaisesMessage(exceptions.AuthenticationFailed, "Invalid Token."):
+        with self.assertRaisesMessage(exceptions.NotAuthenticated, "Invalid Token."):
             jwt_auth.authenticate(req)

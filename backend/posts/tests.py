@@ -1,12 +1,15 @@
-from datetime import timedelta, datetime
+import uuid
+from datetime import timedelta, datetime, timezone as tz
 
+import jwt
 import orjson
+from django.conf import settings
 from django.test import TestCase
 from django.utils import timezone
 from django.core.cache import cache
 from django.template.defaultfilters import slugify
 from django.contrib.auth import get_user_model
-from rest_framework import status
+from rest_framework import status, exceptions
 from rest_framework.test import APIClient
 
 from .models import Post
@@ -147,6 +150,12 @@ class PostManagerViewSetTestCase(TestCase):
             username=self.username,
             password=self.password,
         )
+        self.post = Post.objects.create(
+            title="basetitle",
+            user=self.user,
+            body="body",
+            summary="summary",
+        )
         self.token = "Token " + self.client.post(
             "/user-panel/login/",
             data={
@@ -216,3 +225,19 @@ class PostManagerViewSetTestCase(TestCase):
                 many=True,
             ).data
         )
+
+    def test_retrieve(self):
+        resp = self.client.get(self.baseurl + f"{self.post.slug}/")
+
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        self.assertEqual(resp.data, PostManagerSerializer(self.post).data)
+
+    def test_auth(self):
+        client = APIClient()
+
+        resp = client.get(self.baseurl)
+        self.assertEqual(resp.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_destroy(self):
+        resp = self.client.delete(self.baseurl + f"{self.post.slug}/")
+        self.assertEqual(resp.status_code, status.HTTP_204_NO_CONTENT)
