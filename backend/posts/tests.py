@@ -1,25 +1,31 @@
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 import orjson
 from django.test import TestCase
 from django.utils import timezone
 from django.core.cache import cache
 from django.template.defaultfilters import slugify
+from django.contrib.auth import get_user_model
 from rest_framework import status
 from rest_framework.test import APIClient
 
 from .models import Post
 from .serializers import (
-    PostSerializer,
+    PostManagerSerializer,
     PostOverviewSerializer,
 )
 
 
 class PostModelTestCase(TestCase):
     def setUp(self):
+        self.user = get_user_model().objects.create_user(
+            username="testUser",
+            password="testPassword",
+        )
         for i in range(5):
             Post.objects.create(
                 title=f"title: {i}",
+                user=self.user,
                 is_active=True if i & 1 else False,
                 body=f"body {i}",
                 summary=f"summary {i}",
@@ -56,13 +62,19 @@ class PostViewTestCase(TestCase):
     def setUp(self):
         self.client = APIClient()
         self.base_url = "/post/"
+        self.user = get_user_model().objects.create_user(
+            username="testUser",
+            password="testPassword",
+        )
         self.active_post =  Post.objects.create(
                 title="title: 1", is_active=True,
                 body="body 1", summary="summary 1",
+                user=self.user,
             )
         self.inactive_post =  Post.objects.create(
                 title="title: 2", is_active=False,
                 body="body 2", summary="summary 2",
+                user=self.user,
             )
 
     def test_get_post(self):
@@ -81,13 +93,19 @@ class PostListViewSetTestCase(TestCase):
     def setUp(self):
         self.client = APIClient()
         self.base_url = "/posts"
+
+        self.user = get_user_model().objects.create_user(
+            username="testUser",
+            password="testPassword",
+        )
         for i in range(30):
             Post.objects.create(
                 title=f"title: {i}",
                 is_active=True if i & 1 else False,
                 body=f"body {i}",
                 summary=f"summary {i}",
-                pub_date = timezone.now() - timedelta(days=1)
+                pub_date = timezone.now() - timedelta(days=1),
+                user=self.user,
             )
 
     def test_overview(self):
@@ -116,3 +134,85 @@ class PostListViewSetTestCase(TestCase):
         ).data
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(resp.data["results"], serialized_data)
+
+
+class PostManagerViewSetTestCase(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.baseurl = "/post-mng/"
+
+        self.username = "testUser"
+        self.password = "testPassword"
+        self.user = get_user_model().objects.create_user(
+            username=self.username,
+            password=self.password,
+        )
+        self.token = "Token " + self.client.post(
+            "/user-panel/login/",
+            data={
+                "username": self.username,
+                "password": self.password,
+            }
+        ).data["Token"]
+        self.client.credentials(HTTP_AUTHORIZATION=self.token)
+
+    def test_create(self):
+        data = {
+            "title": "This is a valid title",
+            "body": "This is the content of the post.",
+            "summary": "This is the summary.",
+        }
+        resp = self.client.post(self.baseurl, data, format="json")
+
+        self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(
+            resp.data,
+            PostManagerSerializer(
+                Post.objects.filter(**data).first(),
+            ).data,
+        )
+
+    def test_update(self):
+        data = {
+            "title": "This is a older valid title",
+            "user": self.user,
+            "body": "This is the older content of the post.",
+            "summary": "This is the older summary.",
+            "is_active": True,
+        }
+        post = Post.objects.create(**data)
+
+        data = {
+            "title": "This is a new valid title",
+            "body": "This is the new content of the post.",
+            "summary": "This is the new summary.",
+        }
+        resp = self.client.put(
+            self.baseurl + f"{post.slug}/", data, format="json"
+        )
+
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        post.refresh_from_db()
+        self.assertEqual(resp.data, PostManagerSerializer(post).data)
+
+    def test_list(self):
+        user2 = get_user_model().objects.create_user(
+            username="user2",
+            password="password2",
+        )
+        for i in range(40):
+            Post.objects.create(
+                title=f"title-{i}",
+                user=self.user if i & 1 else user2,
+                body="some body",
+                summary="some summary",
+            )
+        resp = self.client.get(self.baseurl + "?page=1")
+
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+
+        self.assertEqual(resp.data["results"], PostManagerSerializer(
+                Post.objects.filter(user=self.user)[:10],
+                many=True,
+            ).data
+        )

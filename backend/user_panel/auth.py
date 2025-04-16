@@ -75,7 +75,7 @@ def check_token(token: str):
             cache_data["token"] == token
         )
         return user
-    except Exception as e:
+    except Exception:
         return None
 
 

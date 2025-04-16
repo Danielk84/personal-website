@@ -2,19 +2,20 @@ from http import HTTPMethod as HM
 
 import orjson
 from django.core.cache import cache
-from rest_framework import viewsets
-from rest_framework import mixins
-from rest_framework import status
+from rest_framework import viewsets, mixins, status
 from rest_framework.decorators import api_view, action
 from rest_framework.request import Request
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 
 from .models import Post
 from .serializers import (
     PostSerializer,
+    PostManagerSerializer,
     PostOverviewSerializer,
 )
 from backend.celery import set_cache
+from user_panel.auth import JWTAuthentication
 
 
 @api_view([HM.GET])
@@ -51,13 +52,21 @@ class PostListViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
         )
 
 
-class PostManagerView(
+class PostManagerViewSet(
+    mixins.ListModelMixin,
     mixins.RetrieveModelMixin,
     mixins.CreateModelMixin,
     mixins.UpdateModelMixin,
     mixins.DestroyModelMixin,
     viewsets.GenericViewSet,
 ):
-    queryset = Post.objects.all()
-    serializer_class = PostSerializer
+    serializer_class = PostManagerSerializer
     lookup_field = "slug"
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Post.objects.filter(user=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
