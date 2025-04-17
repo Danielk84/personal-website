@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "user_panel",
     "posts",
+    "medias",
 ]
 
 MIDDLEWARE = [
