@@ -112,8 +112,6 @@ class PostListViewSetTestCase(TestCase):
             many=True,
         ).data
 
-        print(resp.data)
-        print(serialized_data)
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(resp.data, serialized_data)
         self.assertEqual(resp.data, orjson.loads(cache.get("post-overview")))
@@ -126,6 +124,7 @@ class PostListViewSetTestCase(TestCase):
         ).data
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(resp.data["results"], serialized_data)
+        self.assertEqual(resp.data, orjson.loads(cache.get("post-list-page-1")))
 
         resp = self.client.get(self.base_url + "/?page=2")
         serialized_data = PostOverviewSerializer(
@@ -134,6 +133,7 @@ class PostListViewSetTestCase(TestCase):
         ).data
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(resp.data["results"], serialized_data)
+        self.assertEqual(resp.data, orjson.loads(cache.get("post-list-page-2")))
 
 class PostManagerViewSetTestCase(TestCase):
     def setUp(self):

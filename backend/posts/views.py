@@ -53,8 +53,18 @@ class PostListViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
         else:
             data = self.serializer_class(self.queryset[:4], many=True).data
             set_cache(key, orjson.dumps(data))
-        print(data)
         return Response(data)
+
+    def list(self, req: Request, *args, **kwargs):
+        page = req.query_params.get("page", 1)
+        key = f"post-list-page-{page}"
+
+        if (value := cache.get(key)):
+            return Response(orjson.loads(value))
+        else:
+            resp = super().list(req, *args, **kwargs)
+            set_cache(key, orjson.dumps(resp.data))
+            return resp
 
 
 class PostManagerViewSet(
