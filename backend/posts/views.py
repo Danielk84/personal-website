@@ -44,7 +44,7 @@ def get_post(req: Request, slug_value):
             query = Post.objects.published().get(slug=slug_value)
             instance = PostSerializer(query).data
 
-            set_cache(key, orjson.dumps(instance))
+            set_cache.delay(key, orjson.dumps(instance))
         return Response(instance)
     except Exception:
         return Response(status=status.HTTP_404_NOT_FOUND)
@@ -84,7 +84,7 @@ class PostListViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
             data = orjson.loads(value)
         else:
             data = self.serializer_class(self.queryset[:4], many=True).data
-            set_cache(key, orjson.dumps(data))
+            set_cache.delay(key, orjson.dumps(data))
         return Response(data)
 
     def list(self, req: Request, *args, **kwargs):
@@ -110,7 +110,7 @@ class PostListViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
             return Response(orjson.loads(value))
         else:
             resp = super().list(req, *args, **kwargs)
-            set_cache(key, orjson.dumps(resp.data))
+            set_cache.delay(key, orjson.dumps(resp.data))
             return resp
 
 

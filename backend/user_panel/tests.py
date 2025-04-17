@@ -1,4 +1,5 @@
 import uuid
+from time import sleep
 from datetime import datetime, timezone, timedelta
 
 import jwt
@@ -29,12 +30,8 @@ class AuthTestCase(TestCase):
         self.assertEqual(token, generate_token(self.user))
 
     def test_check_token(self):
-        """
-        if you test for first time this test has error and 
-        second and other time there is not any errors for this test.
-        why? i don't know for now!
-        """
         token = generate_token(self.user)
+        sleep(2)
         self.assertEqual(check_token(token), self.user)
 
         _UUID = str(uuid.uuid4())

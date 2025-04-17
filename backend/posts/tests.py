@@ -1,3 +1,5 @@
+from time import sleep
+
 import orjson
 from django.test import TestCase
 from django.core.cache import cache
@@ -77,6 +79,8 @@ class PostViewTestCase(TestCase):
     def test_get_post(self):
         resp = self.client.get(self.base_url + self.active_post.slug + "/")
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
+
+        sleep(1)
         self.assertEqual(
             resp.data,
             orjson.loads(cache.get(f"post-{self.active_post.slug}"))
@@ -114,6 +118,8 @@ class PostListViewSetTestCase(TestCase):
 
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(resp.data, serialized_data)
+
+        sleep(1)
         self.assertEqual(resp.data, orjson.loads(cache.get("post-overview")))
 
     def test_list(self):
@@ -124,6 +130,8 @@ class PostListViewSetTestCase(TestCase):
         ).data
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(resp.data["results"], serialized_data)
+
+        sleep(2)
         self.assertEqual(resp.data, orjson.loads(cache.get("post-list-page-1")))
 
         resp = self.client.get(self.base_url + "/?page=2")
@@ -133,6 +141,8 @@ class PostListViewSetTestCase(TestCase):
         ).data
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(resp.data["results"], serialized_data)
+
+        sleep(2)
         self.assertEqual(resp.data, orjson.loads(cache.get("post-list-page-2")))
 
 

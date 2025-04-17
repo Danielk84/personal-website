@@ -22,7 +22,7 @@ class Photo(models.Model):
         return super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
-        delete_local_file(self.img.path)
+        delete_local_file.delay(self.img.path)
         return super().delete(*args, **kwargs)
 
     def is_published(self) -> bool:

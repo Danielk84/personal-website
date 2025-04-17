@@ -15,7 +15,10 @@ app.autodiscover_tasks()
 
 @app.task
 def set_cache(key, value):
-    cache.set(key, value, timeout=settings.TOKEN_EXPIRED_TIME * 60)
+    try:
+        cache.set(key, value, timeout=settings.TOKEN_EXPIRED_TIME * 60)
+    except Exception as ex:
+        raise ex
 
 
 @app.task
