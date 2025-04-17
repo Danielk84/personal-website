@@ -1,15 +1,9 @@
-import uuid
-from datetime import timedelta, datetime, timezone as tz
-
-import jwt
 import orjson
-from django.conf import settings
 from django.test import TestCase
-from django.utils import timezone
 from django.core.cache import cache
 from django.template.defaultfilters import slugify
 from django.contrib.auth import get_user_model
-from rest_framework import status, exceptions
+from rest_framework import status
 from rest_framework.test import APIClient
 
 from .models import Post
@@ -107,7 +101,7 @@ class PostListViewSetTestCase(TestCase):
                 is_active=True if i & 1 else False,
                 body=f"body {i}",
                 summary=f"summary {i}",
-                pub_date = timezone.now() - timedelta(days=1),
+                pub_date = '2025-04-17 09:03:53.228014+00:00',
                 user=self.user,
             )
 
@@ -118,8 +112,11 @@ class PostListViewSetTestCase(TestCase):
             many=True,
         ).data
 
+        print(resp.data)
+        print(serialized_data)
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(resp.data, serialized_data)
+        self.assertEqual(resp.data, orjson.loads(cache.get("post-overview")))
 
     def test_list(self):
         resp = self.client.get(self.base_url + "/")
@@ -137,7 +134,6 @@ class PostListViewSetTestCase(TestCase):
         ).data
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(resp.data["results"], serialized_data)
-
 
 class PostManagerViewSetTestCase(TestCase):
     def setUp(self):

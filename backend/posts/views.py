@@ -42,14 +42,19 @@ class PostListViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     @action(detail=False, methods=[HM.GET])
     def overview(self, req: Request):
         """
-        Custom action to retrieve an overview of posts.
+        Custom action to retrieve an overview of posts, and cache content.
 
         Response: A serialized representation of the first four posts
         from the queryset, formatted as a JSON response.
         """
-        return Response(
-            self.serializer_class(self.queryset[:4], many=True).data
-        )
+        key = "post-overview"
+        if (value := cache.get(key)):
+            data = orjson.loads(value)
+        else:
+            data = self.serializer_class(self.queryset[:4], many=True).data
+            set_cache(key, orjson.dumps(data))
+        print(data)
+        return Response(data)
 
 
 class PostManagerViewSet(
