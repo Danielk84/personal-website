@@ -22,3 +22,6 @@ app/*.ntvs*
 app/*.njsproj
 app/*.sln
 app/*.sw?
+
+backend/*.sqlite3
+backend/md_files
