@@ -4,7 +4,7 @@ from django.db import models
 from django.template.defaultfilters import slugify
 
 from posts.models import Post
-
+from backend.celery import delete_local_file
 
 class Photo(models.Model):
     name = models.CharField(max_length=250)
@@ -20,6 +20,10 @@ class Photo(models.Model):
         _UUID = str(uuid.uuid4())
         self.slug = slugify(f"{self.name}-{_UUID}")
         return super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        delete_local_file(self.img.path)
+        return super().delete(*args, **kwargs)
 
     def is_published(self) -> bool:
         return self.is_active

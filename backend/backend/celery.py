@@ -16,3 +16,9 @@ app.autodiscover_tasks()
 @app.task
 def set_cache(key, value):
     cache.set(key, value, timeout=settings.TOKEN_EXPIRED_TIME * 60)
+
+
+@app.task
+def delete_local_file(file_path):
+    if os.path.exists(file_path):
+        os.remove(file_path)
