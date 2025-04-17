@@ -6,6 +6,7 @@ from django.template.defaultfilters import slugify
 from posts.models import Post
 from backend.celery import delete_local_file
 
+
 class Photo(models.Model):
     name = models.CharField(max_length=250)
     slug = models.SlugField(allow_unicode=True, unique=True)
@@ -13,7 +14,7 @@ class Photo(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     img = models.ImageField(upload_to="photos/%Y/%m/%d")
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
     def save(self, *args, **kwargs):
