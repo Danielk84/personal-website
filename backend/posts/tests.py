@@ -135,6 +135,7 @@ class PostListViewSetTestCase(TestCase):
         self.assertEqual(resp.data["results"], serialized_data)
         self.assertEqual(resp.data, orjson.loads(cache.get("post-list-page-2")))
 
+
 class PostManagerViewSetTestCase(TestCase):
     def setUp(self):
         self.client = APIClient()
