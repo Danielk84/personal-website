@@ -8,7 +8,7 @@ from backend.celery import delete_local_file
 
 
 class Photo(models.Model):
-    name = models.CharField(max_length=250)
+    title = models.CharField(max_length=250)
     slug = models.SlugField(allow_unicode=True, unique=True)
     is_active = models.BooleanField(default=False)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
@@ -19,7 +19,7 @@ class Photo(models.Model):
 
     def save(self, *args, **kwargs):
         _UUID = str(uuid.uuid4())
-        self.slug = slugify(f"{self.name}-{_UUID}")
+        self.slug = slugify(f"{self.title}-{_UUID}")
         return super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):

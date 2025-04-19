@@ -145,5 +145,6 @@ class OnlyAdminJWTAuthTestCase(TestCase):
 
         sleep(1)
         jwt_auth = OnlyAdminJWTAuthetication()
+
         with self.assertRaisesMessage(exceptions.PermissionDenied, "Invalid User."):
             jwt_auth.authenticate(req)

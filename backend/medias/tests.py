@@ -27,7 +27,7 @@ class PhotoModelTestCase(TestCase):
         )
         self.img_name = str(uuid.uuid4())
         self.photo = Photo.objects.create(
-            name="Template",
+            title="Template",
             post=self.post,
             img=SimpleUploadedFile(
                 name=f"{self.img_name}.jpg",
@@ -39,13 +39,13 @@ class PhotoModelTestCase(TestCase):
 
     def test_slug_value(self):
         self.assertTrue(
-            self.photo.slug.startswith(slugify(self.photo.name))
+            self.photo.slug.startswith(slugify(self.photo.title))
         )
 
         old_slug = self.photo.slug
         self.photo.save()
         self.assertTrue(
-            self.photo.slug.startswith(slugify(self.photo.name))
+            self.photo.slug.startswith(slugify(self.photo.title))
         )
         self.assertNotEqual(old_slug, self.photo.slug)
 
