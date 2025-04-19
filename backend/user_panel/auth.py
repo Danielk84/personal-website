@@ -102,3 +102,30 @@ class JWTAuthentication(TokenAuthentication):
             raise exceptions.NotAuthenticated("Invalid Token.")
 
         return (user, key)
+
+
+class OnlyAdminJWTAuthetication(TokenAuthentication):
+    """
+    Custom JWT authentication class that allows access only to superusers.
+
+    This class extends DRF's TokenAuthentication and overrides the 
+    `authenticate_credentials` method to validate and authenticate a user
+    based on the provided JWT.
+
+    This authentication method verifies the provided JWT token, ensuring that:
+    1. The token is valid and corresponds to an authenticated user.
+    2. The authenticated user has superuser privileges (`is_superuser=True`).
+    3. If either condition is not met, appropriate exceptions are raised.
+    """
+    def authenticate_credentials(self, key):
+        """
+        This method used by authentication method in TokenAuthentication,
+        so it not used directly.
+        """
+        if not (user := check_token(key)):
+            raise exceptions.NotAuthenticated("Invalid Token.")
+
+        if not user.is_superuser:
+            raise exceptions.PermissionDenied("Invalid User.")
+
+        return (user, key)

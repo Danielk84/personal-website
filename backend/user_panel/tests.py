@@ -10,7 +10,12 @@ from django.contrib.auth.models import User
 from rest_framework import status, exceptions
 from rest_framework.test import APIClient
 
-from .auth import generate_token, check_token, JWTAuthentication
+from .auth import (
+    generate_token,
+    check_token, 
+    JWTAuthentication,
+    OnlyAdminJWTAuthetication,
+)
 
 
 class AuthTestCase(TestCase):
@@ -87,4 +92,58 @@ class AuthTestCase(TestCase):
         )
         req.META['HTTP_AUTHORIZATION'] = f'Token {token}'
         with self.assertRaisesMessage(exceptions.NotAuthenticated, "Invalid Token."):
+            jwt_auth.authenticate(req)
+
+
+class OnlyAdminJWTAuthTestCase(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.login_url = "/user-panel/login/"
+
+        self.password = "testpassword"
+        self.superuser = User.objects.create_superuser(
+            username="testsuperuser",
+            password=self.password,
+        )
+        self.not_superuser = User.objects.create_user(
+            username="testnotsuperuser",
+            password=self.password,
+        )
+
+    def test_superuser_auth(self):
+        resp = self.client.post(
+            self.login_url,
+            data={
+                "username": self.superuser.username,
+                "password": self.password,
+            }
+        )
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+
+        req = HttpRequest()
+        req.META['HTTP_AUTHORIZATION'] = f'Token {resp.data["Token"]}'
+
+        sleep(1)
+        jwt_auth = OnlyAdminJWTAuthetication()
+        result = jwt_auth.authenticate(req)
+
+        self.assertEqual(result[0], self.superuser)
+        self.assertEqual(result[1], resp.data["Token"])
+
+    def test_not_superuser_auth(self):
+        resp = self.client.post(
+            self.login_url,
+            data={
+                "username": self.not_superuser.username,
+                "password": self.password,
+            }
+        )
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+
+        req = HttpRequest()
+        req.META['HTTP_AUTHORIZATION'] = f'Token {resp.data["Token"]}'
+
+        sleep(1)
+        jwt_auth = OnlyAdminJWTAuthetication()
+        with self.assertRaisesMessage(exceptions.PermissionDenied, "Invalid User."):
             jwt_auth.authenticate(req)
