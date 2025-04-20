@@ -15,7 +15,7 @@ class Photo(models.Model):
     img = models.ImageField(upload_to="photos/%Y/%m/%d")
 
     def __str__(self) -> str:
-        return self.name
+        return self.title
 
     def save(self, *args, **kwargs):
         _UUID = str(uuid.uuid4())
