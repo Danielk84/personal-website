@@ -13,7 +13,6 @@ from posts.models import Post
 class PhotoManagerViewSet(viewsets.ViewSet):
     serializer_class = PhotoSerializer
     lookup_field = "slug"
-
     authentication_classes = [JWTAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 
@@ -23,17 +22,14 @@ class PhotoManagerViewSet(viewsets.ViewSet):
 
         return post
 
-    def get_objects(self, slug: str):
+    def get_object(self, slug: str):
         post = self.get_parent_object()
         photo = get_object_or_404(Photo, slug=slug, post=post)
 
-        return (post, photo)
+        return photo
 
     def perform_list(self, parent):
         return Photo.objects.filter(post=parent)
-
-    def perform_create(self, serializer, parent):
-        serializer.save(post=parent)
 
     def list(self, req: Request):
         parent = self.get_parent_object()
@@ -41,31 +37,13 @@ class PhotoManagerViewSet(viewsets.ViewSet):
 
         return Response(serializer.data)
 
-    def create(self, req: Request):
-        parent = self.get_parent_object()
-
-        serializer = self.serializer_class(req.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer, parent)
-
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-
     def retrieve(self, req: Request, slug: str = None):
-        objs = self.get_objects(slug)
+        objs = self.get_object(slug)
 
-        return Response(self.serializer_class(objs[1]).data)
-
-    def update(self, req: Request, slug: str = None):
-        objs = self.get_objects(slug)
-
-        serializer = self.serializer_class(objs[1], data=req.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.update()
-
-        return Response(serializer.data)
+        return Response(self.serializer_class(objs).data)
 
     def destroy(self, req: Request, slug: str = None):
-        objs = self.get_objects(slug)
-        objs[1].delete()
+        objs = self.get_object(slug)
+        objs.delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
