@@ -238,3 +238,55 @@ class UploadPhotoAPIViewTestCase(TestCase):
     def tearDown(self):
         if os.path.exists(self.file_path):
             os.remove(self.file_path)
+
+
+class ServerPhotoViewTestCase(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+
+        self.password = "testPassword"
+        self.user = User.objects.create_user(
+            username="testUsername",
+            password=self.password,
+        )
+        self.post = Post.objects.create(
+            title="testTitle",
+            user=self.user,
+            body="testBody",
+            summary="testSummary",
+        )
+
+        self.active_photo = Photo.objects.create(
+            title="Template",
+            post=self.post,
+            img=SimpleUploadedFile(
+                name=f"{str(uuid.uuid4())}.jpg",
+                content=b"file_content",
+                content_type="image/jpeg"
+            ),
+            is_active=True,
+        )
+        self.inactive_photo = Photo.objects.create(
+            title="NOTTemplate",
+            post=self.post,
+            img=SimpleUploadedFile(
+                name=f"{str(uuid.uuid4())}.jpg",
+                content=b"file_content",
+                content_type="image/jpeg"
+            ),
+            is_active=False,
+        )
+        self.base_url = "/md_files/"
+
+    def test_active_photo(self):
+        resp = self.client.get(self.base_url + str(self.active_photo.img))
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+
+
+    def test_inactive_photo(self):
+        resp = self.client.get(self.base_url + str(self.inactive_photo.img))
+        self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
+
+    def tearDown(self):
+        os.remove(self.active_photo.img.path)
+        os.remove(self.inactive_photo.img.path)

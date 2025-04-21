@@ -1,9 +1,12 @@
+from http import HTTPMethod
+
 from django.views.static import serve
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, permissions, status
 from rest_framework.parsers import MultiPartParser, FileUploadParser, FormParser
 from rest_framework.request import Request
 from rest_framework.response import Response
+from rest_framework.decorators import api_view
 
 from .models import Photo
 from .forms import UploadPhotoForm
@@ -112,3 +115,17 @@ class UploadPhotoViewSet(BaseGetObjMixin, viewsets.ViewSet):
         form.save()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view([HTTPMethod.GET])
+def server_photo(req: Request, path, document_root=None, show_indexes=False):
+    """
+    Serves a photo file from the media directory if is active.
+    """
+    try:
+        photo = Photo.objects.get(img=path)
+        assert photo.is_active
+
+        return serve(req, path, document_root, show_indexes)
+    except Exception:
+        return Response(status=status.HTTP_404_NOT_FOUND)
