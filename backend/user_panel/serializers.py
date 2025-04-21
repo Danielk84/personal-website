@@ -11,6 +11,7 @@ def create_activation_serializer(base_model):
         class Meta:
             model = base_model
             fields = ["title", "is_active", "slug"]
+            read_only_fields = ["title", "slug"]
 
     return BaseActivationSerializer
 

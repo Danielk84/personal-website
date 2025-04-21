@@ -44,7 +44,7 @@ class AdminManagerMixin(
     permission_classes = [permissions.IsAuthenticated]
     full_serializer = ...
 
-    def retrieve(self, slug: str):
+    def retrieve(self, req: Request, slug: str):
         try:
             obj = self.queryset.get(slug=slug)
             return Response(self.full_serializer(obj).data)
