@@ -27,8 +27,8 @@ onMounted(() =>
       </div>
 
       <div class="flex">
-        <FirstButton address="/post">Login</FirstButton>
-        <SecondButton address="/post">SginUp</SecondButton>
+        <FirstButton address="/login-panel">Login</FirstButton>
+        <SecondButton address="/login-panel">SginUp</SecondButton>
       </div>
     </div>
   </header>

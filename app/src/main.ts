@@ -13,6 +13,7 @@ const component = [
   "PostBox",
   "AsideLayer",
   "PostOverview",
+  "Input",
   "FooterLayer",
 ]
 
