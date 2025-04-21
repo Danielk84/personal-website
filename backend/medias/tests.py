@@ -1,11 +1,9 @@
 import os
 import uuid
-import base64
 import tempfile
 from time import sleep
 
-import PIL
-import PIL.Image
+from PIL import Image
 from django.test import TestCase
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
@@ -136,6 +134,106 @@ class PhotoManagerViewSetTestCase(TestCase):
         )
         self.assertEqual(resp.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(Photo.objects.filter(slug=slug).count(), 0)
+
+    def tearDown(self):
+        if os.path.exists(self.file_path):
+            os.remove(self.file_path)
+
+
+class UploadPhotoAPIViewTestCase(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+
+        self.password = "testPassword"
+        self.user = User.objects.create_user(
+            username="testUsername",
+            password=self.password,
+        )
+        self.post = Post.objects.create(
+            title="testTitle",
+            user=self.user,
+            body="testBody",
+            summary="testSummary",
+        )
+        self.token = "Token " + self.client.post(
+            "/user-panel/login/",
+            data={
+                "username": self.user.username,
+                "password": self.password,
+            }
+        ).data["Token"]
+        self.client.credentials(HTTP_AUTHORIZATION=self.token)
+        self.base_url = "/medias/upload-photo/"
+
+        self.img_name = str(uuid.uuid4())
+        self.photo = Photo.objects.create(
+            title="Template",
+            post=self.post,
+            img=SimpleUploadedFile(
+                name=f"{self.img_name}.jpg",
+                content=b"file_content",
+                content_type="image/jpeg"
+            ),
+        )
+        self.file_path = self.photo.img.path
+        sleep(1)
+
+    def test_create(self):
+        title = "test_title"
+        img = Image.new('RGB', (500, 500), color='white')
+
+        with tempfile.NamedTemporaryFile(suffix=".jpg") as temp_f:
+            img.save(temp_f, format="JPEG")
+            temp_f.seek(0)
+            
+            resp = self.client.post(
+                self.base_url + f"?post={self.post.slug}",
+                data = {
+                    "title": title,
+                    "img": SimpleUploadedFile(
+                        name=temp_f.name,
+                        content=temp_f.read(),
+                        content_type="image/jpeg"
+                    ),
+                },
+                format="multipart",
+            )
+
+            self.assertEqual(resp.status_code, status.HTTP_204_NO_CONTENT)
+            photo = Photo.objects.get(title=title)
+
+            temp_f.seek(0)
+            with open(photo.img.path, "rb+") as f:
+                self.assertEqual(f.read(), temp_f.read())
+
+    def test_update(self):
+        img = Image.new('RGB', (500, 500), color='white')
+
+        photo = Photo.objects.get(title=self.photo.title)
+
+        with tempfile.NamedTemporaryFile(prefix="new_", suffix=".jpg") as temp_f:
+            img.save(temp_f, format="JPEG")
+            temp_f.seek(0)
+
+            resp = self.client.put(
+                self.base_url + photo.slug + f"/?post={self.post.slug}",
+                data = {
+                    "title": self.photo.title,
+                    "img": SimpleUploadedFile(
+                        name=temp_f.name,
+                        content=temp_f.read(),
+                        content_type="image/jpeg"
+                    ),
+                },
+                format="multipart",
+            )
+
+            self.assertEqual(resp.status_code, status.HTTP_204_NO_CONTENT)
+            photo = Photo.objects.get(title=self.photo.title)
+
+            temp_f.seek(0)
+            with open(photo.img.path, "rb+") as f:
+                self.assertEqual(f.read(), temp_f.read())
 
     def tearDown(self):
         if os.path.exists(self.file_path):
