@@ -9,7 +9,7 @@
         <label for="password">Password:</label>
         <Input />
       </div>
-      <FirstButton address="/login-panel/">Login</FirstButton>
+      <FirstButton address="/login-panel">Login</FirstButton>
     </div>
   </div>
 </template>

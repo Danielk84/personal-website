@@ -4,7 +4,7 @@
     <div class="z-0 my-[80px] min-h-[80vh]">
       <RouterView />
     </div>
-    <div class="z-20">
+    <div class="z-10">
       <FooterLayer />
     </div>
   </div>
