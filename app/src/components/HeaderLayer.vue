@@ -1,12 +1,9 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
+import userScreenWidth from '../composables/useScreenWidth.ts';
 
-const screenWidth = ref(window.innerWidth);
+const { screenWidth } = userScreenWidth();
 const flaodBar = ref(false);
-
-onMounted(() => 
-  window.addEventListener("resize", () => screenWidth.value = window.innerWidth)
-);
 </script>
 
 <template>

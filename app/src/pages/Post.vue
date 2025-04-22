@@ -1,8 +1,17 @@
+<script setup lang="ts">
+import useScreenWidth from '../composables/useScreenWidth.ts';
+
+const { screenWidth } = useScreenWidth();
+</script>
+
 <template>
-  <main class="min-h-[80vh] grid grid-cols-3">
-    <AsideLayer />
-    <div class="col-start-2 col-end-4 min-h-[1000px] m-8">
-      <article></article>
+  <main class="min-h-[80vh] grid min-lg:grid-cols-3">
+    <div v-if="screenWidth > 1024" class="min-lg:col-start-1 min-lg:col-end-2">
+      <AsideLayer />
+    </div>
+    <div class="min-lg:col-start-2 min-lg:col-end-4
+      min-h-lvh m-8 min-lg:p-8 max-lg:p-4">
+      <article>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea architecto quasi dicta tempore consectetur porro magni tenetur, vitae neque maxime, labore voluptas doloribus molestiae delectus sit, dolor voluptatum aut error. Dolores, a, consectetur minus laboriosam eos vero soluta porro nemo non iure iusto debitis officiis minima tenetur nostrum explicabo. Explicabo officia numquam ipsum. Cupiditate sapiente placeat, vel voluptatem earum facere minima ducimus temporibus error saepe illum voluptatum quam accusantium libero! Quidem harum aliquam magni omnis necessitatibus praesentium accusantium eum non ipsam dignissimos officia pariatur tempora velit dicta qui, quo facilis quod alias itaque cumque? Iste enim alias minus quaerat fuga delectus nemo, accusamus eveniet aperiam vitae, autem quam distinctio vel earum culpa sit! Placeat id hic necessitatibus deserunt facere recusandae unde dignissimos iure odit autem porro rerum doloremque ad, tempore harum itaque sint temporibus. Numquam tempore provident nam, quas rem sunt quisquam, labore ut dolorem nesciunt cum veritatis molestiae ad officiis ratione totam suscipit. Hic officia quis quisquam accusantium distinctio nam eos quae, veniam eligendi, facilis est adipisci veritatis, reiciendis iusto? Quas delectus adipisci possimus doloremque magnam corporis quia! Sint, possimus delectus odio hic deserunt non voluptatibus eaque dignissimos voluptate tempora nesciunt, eligendi placeat laboriosam assumenda, ullam aliquid officiis eos officia numquam rem! Perferendis natus accusantium explicabo architecto fugiat nulla nam cupiditate, tempora numquam unde laborum mollitia et reprehenderit, cumque ut ea voluptate iure est? Molestiae quos ipsam aliquam vero nesciunt fugit pariatur, cum cumque ducimus, quis quam magni, nihil illo deleniti quibusdam molestias deserunt assumenda eos repellat et quidem. Accusantium nostrum voluptate, sapiente tempora, quia cumque officia ab facere aliquid iusto voluptates dicta ducimus reiciendis harum ipsum. Possimus mollitia eius provident ipsum odit saepe sit aliquam, consequatur amet esse accusantium delectus non fugiat, sint dolores natus? Voluptate, magnam tenetur fugit odio accusamus ea beatae! Quos consequatur eaque quae deserunt provident nemo dolor molestias deleniti qui veniam? A, ab libero natus praesentium debitis nesciunt esse quae ipsum, ipsam voluptatibus sunt atque possimus quaerat veniam veritatis consectetur magnam reprehenderit corporis, pariatur aliquid earum optio. Rerum eveniet quo itaque commodi animi nisi ea ex iste mollitia quaerat autem cumque vel, maxime facere. Delectus aspernatur iusto enim maxime inventore eos cum saepe doloribus repellendus assumenda vitae consectetur architecto totam aliquam laboriosam cumque facere, veritatis voluptate provident neque non numquam? Mollitia alias eum inventore, iusto unde doloribus fugiat odit rem hic commodi ex, beatae nostrum. Cum tenetur officia ad dicta perspiciatis officiis nobis et eius iure nisi. Repudiandae beatae ipsum iste! Quas unde dignissimos inventore nulla facere nostrum eius iusto? Animi similique veniam, fugit voluptatibus saepe adipisci consectetur iusto velit deserunt quam quasi minus impedit necessitatibus sequi asperiores placeat labore nulla temporibus, exercitationem eos illum! Iure in omnis quis provident dolore autem doloribus eum, cum et ea nisi distinctio illo maiores! Repellendus itaque tenetur rerum cumque eius earum hic, quia fugit eum, ipsam alias totam a enim quos? Officiis distinctio nisi dolorum ullam fuga culpa modi voluptas! Vitae molestias dolore repellat delectus eaque harum debitis deleniti minus quae iusto voluptates, odit cumque distinctio dolor!</article>
     </div>
   </main>
 </template>
