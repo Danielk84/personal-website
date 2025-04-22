@@ -18,7 +18,7 @@
 </template>
 
 <style scoped>
-  @reference "../assets/base.css";
+  @reference "../base.css";
 
   .content-box {
     @apply flex justify-center items-center;

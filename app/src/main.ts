@@ -1,9 +1,9 @@
-import './assets/base.css'
+import './base.css';
 
-import { createApp, defineAsyncComponent } from 'vue'
+import { createApp, defineAsyncComponent } from 'vue';
 
-import App from './App.vue'
-import router from "./router"
+import App from './App.vue';
+import router from "./router";
 
 const component = [
   "HeaderLayer", 
@@ -14,8 +14,9 @@ const component = [
   "AsideLayer",
   "PostOverview",
   "Input",
+  "PaginationManager",
   "FooterLayer",
-]
+];
 
 const app = createApp(App).use(router);
 

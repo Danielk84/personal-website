@@ -20,7 +20,7 @@ const flaodBar = ref(false);
       <div v-else>
         <button @click="flaodBar = !flaodBar" class="base-btn-transition
           focus:drop-shadow-xl/25">
-          <img class="size-12" src="../../public/menu.svg" alt="menu">
+          <img class="size-12" src="../assets/menu.svg" alt="menu">
         </button>
       </div>
 

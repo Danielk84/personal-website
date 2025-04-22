@@ -11,4 +11,7 @@
     <PostOverview />
     <PostOverview />
   </div>
+  <div>
+    <PaginationManager />
+  </div>
 </template>
