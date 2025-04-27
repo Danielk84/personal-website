@@ -1,3 +1,7 @@
+<script setup lang="ts">
+
+</script>
+
 <template>
   <div class="content-box h-[50vh]">
     <h1>hello</h1>

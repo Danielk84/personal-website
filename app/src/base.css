@@ -3,12 +3,34 @@
 @theme {
   --color-w-1: #DAD6C8;
   --color-w-2: #101010;
+  --color-w-3: #2c2c24;
   --color-b-1: #e8e8e7DD;
   --color-b-2: #073630;
   --color-b-3: #013a20;
   --color-f-1: #000;
   --color-f-2: #fff;
   --color-btn-1: #FB4D16;
+}
+
+@layer components {
+  h1 {
+    font-size: var(--text-4xl);
+    font-weight: var(--font-weight-bold);
+  }
+  h2 {
+    font-size: var(--text-3xl);
+    font-weight: var(--font-weight-semibold);
+  }
+  h3 {
+    font-size: var(--text-2xl);
+    font-weight: var(--font-weight-semibold);
+  }
+  h1, h2, h3 {
+    @apply text-shadow-sm text-shadow-btn-1 delay-150 duration-150;
+  }
+  h1:hover, h2:hover, h3:hover {
+    @apply text-shadow-none underline underline-offset-4;
+  }
 }
 
 .base-btn-transition {
@@ -22,4 +44,8 @@
 
 .ref-box-color {
   @apply bg-linear-to-br from-b-3 to-b-2;
+}
+
+.footer-box-color {
+  @apply bg-linear-to-tr from-w-2 to-w-3 from-60%;
 }
