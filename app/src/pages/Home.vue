@@ -1,5 +1,25 @@
 <script setup lang="ts">
+import { onMounted, ref } from 'vue';
+import { getStaticData } from '../composables/fetchData';
+import type { PostOverview } from '../types/PostSerializers';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
+const loading = ref(true);
+const content = ref<PostOverview[]>();
+
+onMounted(async () => {
+  try {
+    const data = await getStaticData<PostOverview[]>("/posts/");
+    if (data.statusCode !== 200) throw data;
+
+    loading.value = false;
+    content.value = data.data;
+  } catch (error) {
+    console.error(error)
+    router.push("/404/");
+  }
+});
 </script>
 
 <template>
@@ -17,7 +37,7 @@
     <h2>this content box</h2>
   </div>
   <div class="ref-box ref-box-color">
-
+    {{ content }}
   </div>
 </template>
 

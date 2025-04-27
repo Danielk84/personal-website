@@ -49,3 +49,7 @@
 .footer-box-color {
   @apply bg-linear-to-tr from-w-2 to-w-3 from-60%;
 }
+
+.is-loading {
+  @apply blur-2xl;
+}
