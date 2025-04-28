@@ -1,5 +1,5 @@
 export default interface BaseResponseData<T> {
-  json: T | Object;
+  json?: T;
   statusCode: number;
   msg?: string;
 }

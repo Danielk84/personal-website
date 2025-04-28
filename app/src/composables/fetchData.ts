@@ -23,6 +23,6 @@ export async function getStaticData<T>(
     const statusCode = error?.statusCode || 404;
     const msg = error?.msg || "Page Not Found";
 
-    return { json: {}, statusCode, msg };
+    return { json: {} as T,statusCode, msg };
   }
 }

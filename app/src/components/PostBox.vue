@@ -16,7 +16,7 @@ defineProps<PostOverview>()
     </div>
     <hr class="border-btn-1 border-2 my-4"/>
     <p>{{ user }}</p>
-    <time datetime="">{{ pub_date }}</time>
+    <time>{{ pub_date }}</time>
   </div>
   </RouterLink>
 </template>
