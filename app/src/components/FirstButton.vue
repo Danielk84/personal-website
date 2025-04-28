@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type BaseBtnData from '../types/BaseBtnData';
+import type BaseBtnData from '../interfaces/BaseBtnData';
 
 const { 
   color  = "--color-btn-1",

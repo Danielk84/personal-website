@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type BaseBtnData from '../types/BaseBtnData';
+import type BaseBtnData from '../interfaces/BaseBtnData';
 
 interface BtnData extends BaseBtnData {
   bColor: string

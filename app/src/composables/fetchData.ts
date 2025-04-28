@@ -1,7 +1,6 @@
-import type BaseResponseData from "../types/BaseResponseData";
+import type BaseResponseData from "../interfaces/BaseResponseData";
 
 const baseBackendURL = "/api";
-
 
 export async function getStaticData<T>(
   url: string, method = "GET", timeout = 3000,
@@ -14,17 +13,16 @@ export async function getStaticData<T>(
         headers: { "Content-Type": "application/json" }
       },
     );
-    console.log(response);
     if (!response.ok)
       throw { statusCode: response.status, msg: response.statusText };
 
     const json = await response.json();
 
-    return { data: json, statusCode: response.status};
+    return { json: json, statusCode: response.status};
   } catch (error: any) {
     const statusCode = error?.statusCode || 404;
     const msg = error?.msg || "Page Not Found";
 
-    return { statusCode, msg };
+    return { json: {}, statusCode, msg };
   }
 }

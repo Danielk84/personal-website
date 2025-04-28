@@ -1,7 +1,7 @@
 export interface PostOverview {
   title: string;
   slug: string;
-  pubDate: string;
+  pub_date: string;
   summary: string;
   user: string;
 }

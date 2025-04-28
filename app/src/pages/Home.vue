@@ -1,23 +1,22 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import { getStaticData } from '../composables/fetchData';
-import type { PostOverview } from '../types/PostSerializers';
 import { useRouter } from 'vue-router';
+import type { PostOverview } from '../interfaces/PostSerializers';
+import { getStaticData } from '../composables/fetchData';
 
 const router = useRouter();
 const loading = ref(true);
-const content = ref<PostOverview[]>();
+const contents = ref<any>();
 
 onMounted(async () => {
   try {
-    const data = await getStaticData<PostOverview[]>("/posts/");
-    if (data.statusCode !== 200) throw data;
+    const { json, statusCode, msg } = await getStaticData<PostOverview[]>("/posts/overview/");
+    if (statusCode !== 200) throw msg;
 
+    contents.value = json;
     loading.value = false;
-    content.value = data.data;
   } catch (error) {
-    console.error(error)
-    router.push("/404/");
+    router.push(`/404/${error}/`);
   }
 });
 </script>
@@ -26,18 +25,16 @@ onMounted(async () => {
   <div class="content-box h-[50vh]">
     <h1>hello</h1>
   </div>
-    <div class="ref-box ref-box-color overflow-auto">
-      <PostBox />
-      <PostBox />
-      <PostBox />
-      <PostBox />
-      <PostBox />
+  <div v-if="!loading" class="ref-box ref-box-color overflow-auto">
+    <div v-for="content in contents">
+    <PostBox :title="content.title" :slug="content.slug" :pub_date="content.pub_date"
+      :summary="content.summary" :user="content.user"/>
     </div>
+  </div>
   <div class="content-box h-[600px]">
     <h2>this content box</h2>
   </div>
   <div class="ref-box ref-box-color">
-    {{ content }}
   </div>
 </template>
 

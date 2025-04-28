@@ -16,6 +16,7 @@ app/*.local
 # Editor directories and files
 app/.vscode
 app/.idea
+app/.env
 app/.DS_Store
 app/*.suo
 app/*.ntvs*
