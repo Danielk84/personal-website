@@ -32,6 +32,7 @@ class PostManagerSerializer(serializers.ModelSerializer):
 
 class PostOverviewSerializer(serializers.ModelSerializer):
     """ Returns: ("title", "slug", "pub_date", "summary", "user") """
+    user = serializers.CharField(source="user.username")
 
     class Meta:
         model = Post

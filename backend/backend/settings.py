@@ -28,7 +28,7 @@ TOKEN_ALGORITHM = "HS256"
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
     "daphne",
