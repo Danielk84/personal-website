@@ -2,7 +2,7 @@
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import type { PostOverview } from '../interfaces/PostSerializers';
-import { getStaticData } from '../composables/fetchData';
+import { fetchStaticData } from '../composables/fetchData';
 
 const router = useRouter();
 const loading = ref(true);
@@ -10,13 +10,12 @@ const contents = ref<any>();
 
 onMounted(async () => {
   try {
-    const { json, statusCode, msg } = await getStaticData<PostOverview[]>("/posts/overview/");
-    if (statusCode !== 200) throw msg;
+    const resp = await fetchStaticData<PostOverview[]>("/posts/overview/");
 
-    contents.value = json;
+    contents.value = resp.json;
     loading.value = false;
-  } catch (error) {
-    router.push(`/404/${error}/`);
+  } catch (error: any) {
+    router.push(`/404/${error.msg}/`);
   }
 });
 </script>

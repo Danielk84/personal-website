@@ -3,7 +3,7 @@ import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import type { Post } from '../interfaces/PostSerializers.ts';
 import useScreenWidth from '../composables/useScreenWidth.ts';
-import { getStaticData } from '../composables/fetchData.ts';
+import { fetchStaticData } from '../composables/fetchData.ts';
 
 const router = useRouter();
 const route = useRoute();
@@ -12,14 +12,13 @@ const content = ref<Post>()
 
 onMounted(async () => {
   try {
-    const { json, statusCode, msg } = await getStaticData<Post>(
+    const resp = await fetchStaticData<Post>(
       `/post/${route.params.slug}/`,
     );
-    if (statusCode !== 200) throw msg;
 
-    content.value = json;
-  } catch (error) {
-    router.push(`/404/${error}/`);
+    content.value = resp.json;
+  } catch (error: any) {
+    router.push(`/404/${error.msg}/`);
   }
 });
 </script>

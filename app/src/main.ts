@@ -1,6 +1,7 @@
 import './base.css';
 
 import { createApp, defineAsyncComponent } from 'vue';
+import { createPinia } from 'pinia';
 
 import App from './App.vue';
 import router from "./router";
@@ -17,8 +18,8 @@ const component = [
   "PaginationManager",
   "FooterLayer",
 ];
-
-const app = createApp(App).use(router);
+const pinia = createPinia();
+const app = createApp(App).use(router).use(pinia);
 
 component.forEach(name => 
   app.component(name, defineAsyncComponent( () => import(`./components/${name}.vue`)))

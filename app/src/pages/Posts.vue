@@ -2,7 +2,7 @@
 import { onMounted, ref } from 'vue';
 import type { PostOverview } from '../interfaces/PostSerializers';
 import type BasePagination from '../interfaces/BasePagination';
-import { getStaticData } from '../composables/fetchData';
+import { fetchStaticData } from '../composables/fetchData';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
@@ -10,12 +10,11 @@ const contents = ref<PostOverview[]>();
 
 onMounted(async () => {
   try {
-    const { json, statusCode, msg } = await getStaticData("/posts/");
-    if (statusCode !== 200) throw msg;
+    const resp = await fetchStaticData("/posts/");
 
-    contents.value = (json as BasePagination<PostOverview>).results;
-  } catch (error) {
-    router.push(`/404/${error}`);
+    contents.value = (resp.json as BasePagination<PostOverview>).results;
+  } catch (error: any) {
+    router.push(`/404/${error.msg}`);
   }
 });
 </script>

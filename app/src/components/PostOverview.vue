@@ -6,7 +6,7 @@ defineProps<PostOverview>();
 
 <template>
   <div class="flex justify-center">
-    <RouterLink :to="`/post/${slug}/`" class="max-md:w-8/10 min-md:w-6/10">
+    <RouterLink :to="`/post/${slug}`" class="max-md:w-8/10 min-md:w-6/10">
       <div class="ref-box-color text-f-2 border-btn-1 m-4 px-4 py-8 rounded-xl
         min-h-[200px] delay-75 duration-150
         hover:scale-105 hover:drop-shadow-2xl hover:border-4">
