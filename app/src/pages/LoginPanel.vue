@@ -1,3 +1,12 @@
+<script setup lang="ts">
+import { userAuthStore } from '../stores/userAuthStore';
+
+const userStore = userAuthStore();
+
+const updateUsername = (value: string) => userStore.username = value;
+const updatePassword = (value: string) => userStore.password = value;
+</script>
+
 <template>
   <div class="flex justify-center">
     <div class="ref-box-color sm:w-[60%] max-sm:w-[90%] h-[500px] my-20 rounded-2xl
@@ -5,11 +14,12 @@
       text-f-2">
       <div class="flex flex-col gap-4">
         <label for="username">Username:</label>
-        <Input />
+        <StyledInput :date="`${userStore.username}`" @setInput="updateUsername"/>
         <label for="password">Password:</label>
-        <Input />
+        <StyledInput :date="userStore.password" @setInput="updatePassword"
+          type="password"/>
       </div>
-      <FirstButton address="/panel">Login</FirstButton>
+      <FirstButton @click="userStore.fetchLoginAPI()" address="/panel">Login</FirstButton>
     </div>
   </div>
 </template>

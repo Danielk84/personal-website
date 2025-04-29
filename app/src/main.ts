@@ -14,7 +14,7 @@ const component = [
   "PostBox",
   "AsideLayer",
   "PostOverview",
-  "Input",
+  "StyledInput",
   "PaginationManager",
   "FooterLayer",
 ];
