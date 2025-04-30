@@ -3,6 +3,7 @@ import { useRouter } from "vue-router";
 import type { UserAuthState } from "../interfaces/UserAuthState";
 import { fetchStaticData } from "../composables/fetchData";
 
+
 export const userAuthStore = defineStore("user-auth", {
   state: (): UserAuthState => {
     return {
@@ -17,16 +18,20 @@ export const userAuthStore = defineStore("user-auth", {
   },
   actions: {
     async fetchLoginAPI() {
+      const router = useRouter();
       try {
         const resp = await fetchStaticData<{ Token: string }>(
           "/user-panel/login/", "POST",
           JSON.stringify({ username: this.username, password: this.password }),
         );
-
+        if ([400, 403, 404].includes(resp.statusCode)) throw resp;
+        
         this.token = resp.json?.Token as string;
       } catch(error: any) {
-        useRouter().push(
-          `/login-panel/?json=${JSON.stringify(error.json)}&msg=${error.msg}`,
+        const json = error?.json || {};
+        const msg = error?.msg || 'Unknown error';
+        router.push(
+          `/login-panel?json=${JSON.stringify(json)}&msg=${msg}`,
         );
       }
     },
