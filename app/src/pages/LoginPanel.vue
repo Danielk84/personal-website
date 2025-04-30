@@ -19,7 +19,7 @@ const updatePassword = (value: string) => userStore.password = value;
         <StyledInput :date="userStore.password" @setInput="updatePassword"
           type="password"/>
       </div>
-      <FirstButton @click="userStore.fetchLoginAPI()" address="/panel">Login</FirstButton>
+      <FirstButton address="/panel">Login</FirstButton>
     </div>
   </div>
 </template>

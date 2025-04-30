@@ -10,7 +10,7 @@ const flaodBar = ref(false);
   <header class="flex justify-center">
     <div class="bg-b-1 drop-shadow-xl/25 w-97/100 h-16 m-2 
       backdrop-blur-sm rounded-2xl
-      flex justify-evenly items-center fixed z-20">
+      flex justify-evenly items-center fixed">
 
       <div class="icon"></div>
 

@@ -7,6 +7,7 @@ import App from './App.vue';
 import router from "./router";
 
 const component = [
+  "LoadingScreen",
   "HeaderLayer", 
   "PagesBar",
   "FirstButton",
