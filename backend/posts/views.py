@@ -115,7 +115,6 @@ class PostListViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
 
 
 class PostManagerViewSet(
-    mixins.ListModelMixin,
     mixins.RetrieveModelMixin,
     mixins.CreateModelMixin,
     mixins.UpdateModelMixin,
@@ -136,6 +135,7 @@ class PostManagerViewSet(
         permission_classes (list): Ensures only authenticated users have access.
     """
     serializer_class = PostManagerSerializer
+    list_serializer_class = PostOverviewSerializer
     lookup_field = "slug"
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
@@ -166,3 +166,14 @@ class PostManagerViewSet(
             None
         """
         serializer.save(user=self.request.user)
+
+    def list(self, req: Request):
+        queryset = self.get_queryset()
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.list_serializer_class(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.list_serializer_class(queryset, many=True)
+        return Response(serializer.data)

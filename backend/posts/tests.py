@@ -227,7 +227,7 @@ class PostManagerViewSetTestCase(TestCase):
 
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
-        self.assertEqual(resp.data["results"], PostManagerSerializer(
+        self.assertEqual(resp.data["results"], PostOverviewSerializer(
                 Post.objects.filter(user=self.user)[:10],
                 many=True,
             ).data
