@@ -26,9 +26,10 @@ export async function fetchStaticData<T>({
 
     const response = await fetch(baseBackendURL + url, fetchOptions);
     if (!response.ok && response.status !== statusCode) throw response;
-    
+
     const json = await response.json();
-    return { json: json, statusCode: response.status};
+    console.log(json)
+    return { json: json as T, statusCode: response.status};
   } catch (error: any) {
     const statusCode = error?.status || 404;
     const msg = error?.statusText || "Page Not Found";

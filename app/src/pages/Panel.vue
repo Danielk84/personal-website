@@ -14,9 +14,10 @@ const contents = ref<PostOverview[]>();
 onMounted(async () => {
   await userStore.fetchLoginAPI();
   try {
-    const resp = await fetchStaticData(
-      { url: "/post-mng/", authToken: userStore.authToken }
-    );
+    const resp = await fetchStaticData({
+      url: "/post-mng/",
+      authToken: userStore.authToken
+    });
     if ([403, 404].includes(resp.statusCode)) throw resp;
 
     contents.value = (resp.json as BasePagination<PostOverview>).results;

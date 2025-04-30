@@ -2,7 +2,7 @@
 import type BaseBtnData from '../interfaces/BaseBtnData';
 
 interface BtnData extends BaseBtnData {
-  bColor: string
+  bColor?: string
 }
 
 const {

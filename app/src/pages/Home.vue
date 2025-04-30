@@ -5,15 +5,15 @@ import type { PostOverview } from '../interfaces/PostSerializers';
 import { fetchStaticData } from '../composables/fetchData';
 
 const router = useRouter();
-const loading = ref(true);
-const contents = ref<any>();
+const contents = ref<PostOverview[]>();
 
 onMounted(async () => {
   try {
     const resp = await fetchStaticData<PostOverview[]>({ url: "/posts/overview/" });
+    if (resp.statusCode !== 200) throw resp;
 
+    console.log(resp)
     contents.value = resp.json;
-    loading.value = false;
   } catch (error: any) {
     router.push(`/404/${error.msg}/`);
   }
@@ -24,7 +24,7 @@ onMounted(async () => {
   <div class="content-box h-[50vh]">
     <h1>hello</h1>
   </div>
-  <div v-if="!loading" class="ref-box ref-box-color overflow-auto">
+  <div v-if="contents" class="ref-box ref-box-color overflow-auto">
     <div v-for="content in contents">
     <PostBox :title="content.title" :slug="content.slug" :pub_date="content.pub_date"
       :summary="content.summary" :user="content.user"/>

@@ -11,6 +11,7 @@ const contents = ref<PostOverview[]>();
 onMounted(async () => {
   try {
     const resp = await fetchStaticData({ url: "/posts/" });
+    if (resp.statusCode !== 200) throw resp;
 
     contents.value = (resp.json as BasePagination<PostOverview>).results;
   } catch (error: any) {

@@ -17,7 +17,10 @@ export const userAuthStore = defineStore("userAuth", {
     }
   },
   getters: {
-    authToken: (state): string => `Token ${state.token}`,
+    authToken: (state): string => {
+      if (state.token) return `Token ${state.token}`;
+      return "";
+    },
   },
   actions: {
     async fetchLoginAPI() {

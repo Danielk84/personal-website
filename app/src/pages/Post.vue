@@ -4,7 +4,9 @@ import { useRoute, useRouter } from 'vue-router';
 import type { Post } from '../interfaces/PostSerializers.ts';
 import useScreenWidth from '../composables/useScreenWidth.ts';
 import { fetchStaticData } from '../composables/fetchData.ts';
+import { userAuthStore } from '../stores/userAuthStore.ts';
 
+const userStore = userAuthStore();
 const router = useRouter();
 const route = useRoute();
 const { screenWidth } = useScreenWidth();
@@ -12,11 +14,16 @@ const content = ref<Post>()
 
 onMounted(async () => {
   try {
-    const resp = await fetchStaticData<Post>({ url: `/post/${route.params.slug}/` });
+    const resp = await fetchStaticData<Post>({
+      url: `/${ route.query.isPostMng ? 'post-mng' : 'post'}/${route.params.slug}/`,
+      authToken: userStore.authToken,
+    });
+    if (resp.statusCode !== 200) throw resp;
 
     content.value = resp.json;
   } catch (error: any) {
-    router.push(`/404/${error.msg}/`);
+    if (error.statusCode === 401) router.push("/401");
+    else router.push(`/404/${error.msg}/`);
   }
 });
 </script>

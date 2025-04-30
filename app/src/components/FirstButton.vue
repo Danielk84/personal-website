@@ -2,7 +2,7 @@
 import type BaseBtnData from '../interfaces/BaseBtnData';
 
 const { 
-  color  = "--color-btn-1",
+  color = "--color-btn-1",
 } = defineProps<BaseBtnData>();
 </script>
 

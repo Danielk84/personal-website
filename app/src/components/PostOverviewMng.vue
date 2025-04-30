@@ -2,6 +2,7 @@
 import type { PostOverview } from '../interfaces/PostSerializers';
 import { fetchStaticData } from '../composables/fetchData';
 import { userAuthStore } from '../stores/userAuthStore';
+import { RouterLink } from 'vue-router';
 
 defineProps<PostOverview>();
 
@@ -31,9 +32,11 @@ async function deleteItem(slug: string) {
     </div>
     <div class=" flex gap-4
       min-md:flex-col justify-evenly items-center">
-      <button class="base-btn-transition">PreView</button>
-      <button class="base-btn-transition">Edit</button>
-      <button @click="deleteItem(slug)" class="base-btn-transition">Delete</button>
+      <RouterLink :to="`/post/${slug}?isPostMng=true`"
+        class="base-btn-transition button-mng">PreView</RouterLink>
+      <button class="base-btn-transition button-mng">Edit</button>
+      <button @click="deleteItem(slug)"
+        class="base-btn-transition button-mng">Delete</button>
     </div>
   </div>
 </template>
@@ -41,7 +44,7 @@ async function deleteItem(slug: string) {
 <style scoped>
   @reference "../base.css";
 
-  button {
+  .button-mng {
     @apply flex justify-center items-center rounded-xl
       bg-btn-1 w-[80px] h-[30px] text-f-2;
   }
