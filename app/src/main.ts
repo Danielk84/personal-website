@@ -17,6 +17,7 @@ const component = [
   "PostOverview",
   "StyledInput",
   "PaginationManager",
+  "PostOverviewMng",
   "FooterLayer",
 ];
 const pinia = createPinia();

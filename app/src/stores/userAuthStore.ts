@@ -20,10 +20,11 @@ export const userAuthStore = defineStore("user-auth", {
     async fetchLoginAPI() {
       const router = useRouter();
       try {
-        const resp = await fetchStaticData<{ Token: string }>(
-          "/user-panel/login/", "POST",
-          JSON.stringify({ username: this.username, password: this.password }),
-        );
+        const resp = await fetchStaticData<{ Token: string }>({
+          url: "/user-panel/login/",
+          method: "POST",
+          data: JSON.stringify({ username: this.username, password: this.password }),
+        });
         if ([400, 403, 404].includes(resp.statusCode)) throw resp;
         
         this.token = resp.json?.Token as string;

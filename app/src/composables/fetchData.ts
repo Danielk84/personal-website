@@ -1,17 +1,23 @@
 import type BaseResponseData from "../interfaces/BaseResponseData";
+import type FetchStaticDataParams from "../interfaces/FetchStaticDataParams";
 
 const baseBackendURL = "/api";
 
-export async function fetchStaticData<T>(
-  url: string, method:string = "GET", data?: any, statusCode:number = 200, authToken?: string, timeout=4000,
-): Promise<BaseResponseData<T>> {
+export async function fetchStaticData<T>({
+  url = "",
+  method = "GET",
+  data = undefined,
+  statusCode = 200,
+  authToken = "",
+  timeout = 4000,
+}: FetchStaticDataParams): Promise<BaseResponseData<T>> {
   try {
     const fetchOptions: RequestInit = {
       method,
       signal: AbortSignal.timeout(timeout),
       headers: {
         "Content-Type": "application/json",
-        "Authorization": authToken || "",
+        "Authorization": authToken,
       }
     };
 

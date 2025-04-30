@@ -12,9 +12,7 @@ const content = ref<Post>()
 
 onMounted(async () => {
   try {
-    const resp = await fetchStaticData<Post>(
-      `/post/${route.params.slug}/`,
-    );
+    const resp = await fetchStaticData<Post>({ url: `/post/${route.params.slug}/` });
 
     content.value = resp.json;
   } catch (error: any) {

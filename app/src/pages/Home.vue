@@ -10,7 +10,7 @@ const contents = ref<any>();
 
 onMounted(async () => {
   try {
-    const resp = await fetchStaticData<PostOverview[]>("/posts/overview/");
+    const resp = await fetchStaticData<PostOverview[]>({ url: "/posts/overview/" });
 
     contents.value = resp.json;
     loading.value = false;
