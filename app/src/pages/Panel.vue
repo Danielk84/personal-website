@@ -17,11 +17,13 @@ onMounted(async () => {
     const resp = await fetchStaticData(
       { url: "/post-mng/", authToken: userStore.authToken }
     );
-    if ([400, 401, 403, 404].includes(resp.statusCode)) throw resp;
+    if ([403, 404].includes(resp.statusCode)) throw resp;
 
     contents.value = (resp.json as BasePagination<PostOverview>).results;
   } catch (error: any) {
-    console.error(error);
+    if (error.statusCode === 403)
+      router.push(`/${(error.statusCode)}?msg=${error.msg || ""}`);
+    else if (error.statusCode === 404) router.push("/login-panel");
   }
   setTimeout(() => isLoading.value = false, 1500);
 });
@@ -35,5 +37,6 @@ onMounted(async () => {
       <PostOverviewMng :title="content.title" :user="content.user"
         :pub_date="content.pub_date" :summary="content.summary" :slug="content.slug" />
     </div>
+    <PaginationManager />
   </div>
 </template>

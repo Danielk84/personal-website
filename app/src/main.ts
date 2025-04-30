@@ -1,6 +1,6 @@
 import './base.css';
 
-import { createApp, defineAsyncComponent } from 'vue';
+import { createApp, defineAsyncComponent, watch } from 'vue';
 import { createPinia } from 'pinia';
 
 import App from './App.vue';
@@ -20,7 +20,13 @@ const component = [
   "PostOverviewMng",
   "FooterLayer",
 ];
+
 const pinia = createPinia();
+
+watch(pinia.state, (state) => {
+  localStorage.setItem("userAuth", JSON.stringify(state.userAuth));
+}, { deep: true });
+
 const app = createApp(App).use(router).use(pinia);
 
 component.forEach(name => 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { type = "text" } = defineProps<{ type: string }>();
+const { type = "text" } = defineProps<{ type?: string }>();
 const emit = defineEmits(["setInput"]);
 
 const handleInput = (event: Event) => {

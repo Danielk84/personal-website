@@ -4,8 +4,11 @@ import type { UserAuthState } from "../interfaces/UserAuthState";
 import { fetchStaticData } from "../composables/fetchData";
 
 
-export const userAuthStore = defineStore("user-auth", {
+export const userAuthStore = defineStore("userAuth", {
   state: (): UserAuthState => {
+    const oldState = localStorage.getItem("userAuth");
+    if (oldState) return JSON.parse(oldState as string);
+
     return {
       username: "",
       password: "",

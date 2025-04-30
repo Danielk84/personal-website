@@ -1,7 +1,21 @@
 <script setup lang="ts">
 import type { PostOverview } from '../interfaces/PostSerializers';
+import { fetchStaticData } from '../composables/fetchData';
+import { userAuthStore } from '../stores/userAuthStore';
 
 defineProps<PostOverview>();
+
+const userStore = userAuthStore();
+
+async function deleteItem(slug: string) {
+  await fetchStaticData({
+    url: `/post-mng/${slug}/`,
+    method: 'DELETE',
+    authToken: userStore.authToken,
+    statusCode: 204,
+  });
+  window.location.reload();
+}
 </script>
 
 <template>
@@ -19,7 +33,7 @@ defineProps<PostOverview>();
       min-md:flex-col justify-evenly items-center">
       <button class="base-btn-transition">PreView</button>
       <button class="base-btn-transition">Edit</button>
-      <button class="base-btn-transition">Delete</button>
+      <button @click="deleteItem(slug)" class="base-btn-transition">Delete</button>
     </div>
   </div>
 </template>
